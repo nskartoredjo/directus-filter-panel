@@ -60,7 +60,7 @@ export default defineComponent({
     }
 
     async function updateFilters(): Promise<void> {
-      api.get(`panels`, params).then(async ({ data }) => {
+      api.get("panels", params).then(async ({ data }) => {
         let list = [];
         for (const panel of data.data) {
           list.push(patchFilter(panel));

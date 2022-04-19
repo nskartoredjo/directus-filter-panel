@@ -4,8 +4,8 @@ import PanelComponent from './panel.vue';
 export default definePanel({
 	id: 'filter-cardboard',
 	name: 'filter',
-	icon: 'box',
-	description: 'A panel which allows filtering of the surrounding panels',
+	icon: 'filter_alt',
+	description: 'Change the filter of the surrounding pannels',
 	component: PanelComponent,
 	options: [
 		{
