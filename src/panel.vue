@@ -95,10 +95,10 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      if (localStorage.filter) {
-        form.value = localStorage.filter;
-      }
-    });
+      form.value = localStorage.filter
+        ? localStorage.filter
+        : "Enter a value...";
+      reload();
 
     return { form, reload };
   },
