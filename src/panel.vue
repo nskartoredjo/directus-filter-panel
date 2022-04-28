@@ -72,7 +72,6 @@ export default defineComponent({
           cond = cond[collection];
         }
         cond._eq = form.value;
-        console.log(conditions[index]);
 
         await api.patch(`panels/${id}`, { options });
       } catch {}
@@ -92,7 +91,6 @@ export default defineComponent({
 
     function reload() {
       localStorage.filter = form.value;
-      console.log("store");
       updateFilters();
     }
 
