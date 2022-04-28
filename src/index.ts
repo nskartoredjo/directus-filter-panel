@@ -11,7 +11,7 @@ export default definePanel({
 		{
 			field: 'collection',
 			type: 'string',
-			name: 'Collection',
+			name: '$t:collection',
 			meta: {
 				interface: 'system-collection',
 				options: {
@@ -21,11 +21,14 @@ export default definePanel({
 			},
 		},
 		{
-			field: 'field',
-			type: 'string',
-			name: 'Field',
+			field: 'filter',
+			type: 'json',
+			name: '$t:filter',
 			meta: {
-				interface: 'input',
+				interface: 'system-filter',
+				options: {
+					collectionField: 'collection',
+				},
 				width: 'half',
 			},
 		},
