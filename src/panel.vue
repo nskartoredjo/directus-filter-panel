@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text" :class="{ 'has-header': showHeader }">
-      <v-input v-model="filter" placeholder="Type here" />
+      <v-input v-model="form" placeholder="Type here" />
       <div class="button">
         <v-button @click="reload"> Reload </v-button>
       </div>
@@ -23,14 +23,14 @@ export default defineComponent({
       type: String,
       default: "",
     },
-    field: {
-      type: String,
+    filter: {
+      type: Object,
       default: "",
     },
   },
   setup(props) {
-    const filter = ref("");
-    const { field, collection } = props;
+    const form = ref("");
+    const { filter, collection } = props;
 
     const api = useApi();
     const { useInsightsStore } = useStores();
@@ -45,16 +45,34 @@ export default defineComponent({
       },
     };
 
+    function firstLeaf(object: Object) {
+      const child = Object.keys(object);
+      return child.length > 0 && child[0] !== "0"
+        ? [child[0], ...firstLeaf(object[child[0]])]
+        : [];
+    }
+
     async function patchFilter(panel: any): Promise<void> {
       try {
         const { id, options } = panel;
         const conditions = options.filter._and;
+        let path = firstLeaf(filter._and[0]);
+        path.pop();
 
-        const index = conditions.findIndex(
-          (prop) => prop[collection][field]._eq
-        );
+        const index = conditions.findIndex((prop) => {
+          let coll = prop;
+          for (const collection of path) {
+            coll = coll[collection];
+          }
+          return coll._eq;
+        });
 
-        conditions[index][collection][field]._eq = filter.value;
+        let cond = conditions[index];
+        for (const collection of path) {
+          cond = cond[collection];
+        }
+        cond._eq = form.value;
+
         await api.patch(`panels/${id}`, { options });
       } catch {}
     }
@@ -72,17 +90,17 @@ export default defineComponent({
     }
 
     function reload() {
-      localStorage.filter = filter.value;
+      localStorage.filter = form.value;
       updateFilters();
     }
 
     onMounted(() => {
-      if (localStorage.filter) {
-        filter.value = localStorage.filter;
-      }
-    });
+      form.value = localStorage.filter
+        ? localStorage.filter
+        : "Enter a value...";
+      reload();
 
-    return { filter, reload };
+    return { form, reload };
   },
 });
 </script>
