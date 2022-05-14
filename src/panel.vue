@@ -74,7 +74,7 @@ export default defineComponent({
         cond._eq = form.value;
 
         await api.patch(`panels/${id}`, { options });
-      } catch {}
+      } catch { }
     }
 
     async function updateFilters(): Promise<void> {
@@ -97,11 +97,11 @@ export default defineComponent({
     onMounted(() => {
       form.value = localStorage.filter
         ? localStorage.filter
-        : "Enter a value...";
+        : "0";
       reload();
 
-    return { form, reload };
-  },
+      return { form, reload };
+    },
 });
 </script>
 
